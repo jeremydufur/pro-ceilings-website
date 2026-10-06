@@ -6,16 +6,9 @@
   var mine = document.getElementById("mine");
   var picker = document.getElementById("photos");
   var picked = document.getElementById("picked");
+  var order = document.getElementById("order");
+  var queue = [];
   document.getElementById("pick").addEventListener("click", function () { picker.click(); });
-  picker.addEventListener("change", function () {
-    picked.textContent = picker.files.length ? picker.files.length + " photo" + (picker.files.length === 1 ? "" : "s") + " ready." : "No photos selected.";
-  });
-  picker.style.display = "none";
-  function load() {
-    try { var saved = JSON.parse(localStorage.getItem(KEY) || "[]"); if (saved.length) return saved; } catch (e) {}
-    return Array.isArray(window.GALLERY_POSTS) ? window.GALLERY_POSTS.slice() : [];
-  }
-  function save(posts) { localStorage.setItem(KEY, JSON.stringify(posts)); }
   function shrink(file) {
     return new Promise(function (resolve, reject) {
       var reader = new FileReader();
@@ -36,6 +29,37 @@
       reader.readAsDataURL(file);
     });
   }
+  function drawOrder() {
+    order.innerHTML = "";
+    picked.textContent = queue.length ? "Set the photo order, then add the post." : "No photos selected. After upload, set the order, then add the post.";
+    queue.forEach(function (src, index) {
+      var row = document.createElement("div");
+      row.className = "order-item";
+      row.innerHTML = '<img alt=""><strong></strong><button type="button" data-dir="-1">Earlier</button><button type="button" data-dir="1">Later</button>';
+      row.querySelector("img").src = src;
+      row.querySelector("strong").textContent = "Photo " + (index + 1);
+      row.querySelectorAll("button").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var next = index + Number(button.getAttribute("data-dir"));
+          if (next < 0 || next >= queue.length) return;
+          var moved = queue.splice(index, 1)[0];
+          queue.splice(next, 0, moved);
+          drawOrder();
+        });
+      });
+      order.appendChild(row);
+    });
+  }
+  picker.addEventListener("change", async function () {
+    for (var i = 0; i < picker.files.length; i++) queue.push(await shrink(picker.files[i]));
+    picker.value = "";
+    drawOrder();
+  });
+  function load() {
+    try { var saved = JSON.parse(localStorage.getItem(KEY) || "[]"); if (saved.length) return saved; } catch (e) {}
+    return Array.isArray(window.GALLERY_POSTS) ? window.GALLERY_POSTS.slice() : [];
+  }
+  function save(posts) { localStorage.setItem(KEY, JSON.stringify(posts)); }
   function render() {
     mine.innerHTML = "";
     load().sort(function (a, b) { return b.created - a.created; }).forEach(function (post) {
@@ -65,26 +89,26 @@
       render();
     } else alert("That code is not right.");
   });
-  document.getElementById("uploader").addEventListener("submit", async function (event) {
+  document.getElementById("uploader").addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!picker.files.length) { alert("Upload at least one photo."); return; }
-    var photos = [];
-    for (var i = 0; i < picker.files.length; i++) photos.push(await shrink(picker.files[i]));
+    if (!queue.length) { alert("Upload at least one photo."); return; }
     var posts = load();
     posts.push({
       id: Date.now().toString(),
       created: Date.now(),
       title: document.getElementById("title").value.trim(),
       description: document.getElementById("description").value.trim(),
-      photos: photos
+      photos: queue.slice()
     });
     save(posts);
     event.target.reset();
-    picked.textContent = "No photos selected.";
+    queue = [];
+    drawOrder();
     render();
-    alert("Posted. Open Before & After to see it.");
+    window.location.href = "before-after.html";
   });
-  document.getElementById("export").addEventListener("click", function () {
+  var exportButton = document.getElementById("export");
+  if (exportButton) exportButton.addEventListener("click", function () {
     var blob = new Blob(["window.GALLERY_POSTS = " + JSON.stringify(load()) + ";\n"], { type: "text/javascript" });
     var link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
