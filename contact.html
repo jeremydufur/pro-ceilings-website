@@ -141,6 +141,7 @@ textarea { min-height: 120px; }
   .nav { margin-left: 0; }
   .pair img { height: 220px; }
 }
+.pay svg { width: 54px; height: 34px; display:block; } .socials a { width:44px; padding:0; } .socials svg { display:block; }
 </style>
 </head>
 <body>
@@ -151,10 +152,10 @@ textarea { min-height: 120px; }
 </div></header>
 
 <main>
-<section class="hero"><div class="wrap"><p class="kicker">Free estimate</p><h1>Tell us what the ceiling is doing.</h1><p class="lede">Call <a href="tel:3526846900">352-684-6900</a>, or send the room and the town. We schedule Hernando, Pasco, and southern Citrus.</p></div></section>
+<section class="hero"><div class="wrap"><h1>Reach Out to us for a Free estimate</h1><p class="lede"><a class="btn btn-call" href="tel:3526846900">Call now</a></p><p class="lede">Send your info below</p></div></section>
 <section><div class="wrap grid-2">
 <form class="panel form" id="contact-form" action="https://formsubmit.co/jeremy_dufur@hotmail.com" method="POST">
-<h2>Request a quote</h2>
+<p>We schedule Hernando, Pasco, and southern Citrus.</p><h2>Request Free Estimate</h2>
 <input type="hidden" name="_subject" value="Pro Ceilings Website Contact">
 <input type="hidden" name="_cc" value="ceilingpro1@gmail.com">
 <input type="hidden" name="_captcha" value="true">
@@ -162,17 +163,23 @@ textarea { min-height: 120px; }
 <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 <label>Name <input name="name" required></label>
 <label>Phone <input name="phone" type="tel" required></label>
-<label>Location <input name="location" required placeholder="City or neighborhood"></label>
-<label>Subject or service <select name="subject" required><option value="">Select</option><option>Popcorn removal</option><option>Water damaged wall and ceiling repair</option><option>Ceiling prime and paint</option><option>Knockdown, orange peel, popcorn, stomp, or smooth match</option><option>Drywall patch</option><option>Drywall replacement</option><option>Drywall finishing</option><option>Other</option></select></label>
+<label>Location <input name="location" required></label>
 <label>Details <textarea name="message" placeholder="How many rooms, and what the ceiling looks like now"></textarea></label>
 <div class="robot"><input id="robot" type="checkbox" required><label for="robot">I'm not a robot</label></div>
 <label>Check: what is 4 + 3? <input id="math" name="human_check" required></label>
 <button class="submit" type="submit">Submit</button>
-<p class="note">Goes to jeremy_dufur@hotmail.com and ceilingpro1@gmail.com with the subject “Pro Ceilings Website Contact.” The first use needs a confirmation click in the Hotmail inbox.</p>
+
 </form>
 <div>
 <article class="panel"><h2>Service area</h2><div class="areas"><span>Hernando County</span><span>Pasco County</span><span>Southern Citrus</span><span>Spring Hill</span><span>Brooksville</span><span>Hudson</span><span>New Port Richey</span><span>Homosassa</span></div></article>
-<article class="panel" style="margin-top:16px"><h2>Payment options</h2><div class="pays"><span class="pay">Visa</span><span class="pay">Mastercard</span><span class="pay">Amex</span><span class="pay">Discover</span><span class="pay">Cash</span><span class="pay">Check</span></div><p>Monday–Friday 8:00 AM – 5:00 PM. Saturday by appointment. Sunday closed.</p></article>
+<article class="panel" style="margin-top:16px"><h2>Payment options</h2><div class="pays" aria-label="Payment options">
+<span class="pay" title="Visa"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#1a1f71"/><text x="8" y="22" fill="#fff" font-size="13" font-family="Arial" font-weight="700">VISA</text></svg></span>
+<span class="pay" title="Mastercard"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#fff" stroke="#ddd"/><circle cx="22" cy="17" r="8" fill="#eb001b"/><circle cx="32" cy="17" r="8" fill="#f79e1b"/></svg></span>
+<span class="pay" title="American Express"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#2e77bc"/><text x="6" y="21" fill="#fff" font-size="10" font-family="Arial" font-weight="700">AMEX</text></svg></span>
+<span class="pay" title="Discover"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#fff" stroke="#ddd"/><circle cx="34" cy="17" r="8" fill="#f76b1c"/><text x="6" y="21" fill="#111" font-size="8" font-family="Arial" font-weight="700">DISC</text></svg></span>
+<span class="pay" title="Cash"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#e8f6ea" stroke="#0b7a22"/><circle cx="27" cy="17" r="8" fill="none" stroke="#0b7a22" stroke-width="2"/><text x="23" y="21" fill="#0b7a22" font-size="12" font-family="Arial" font-weight="700">$</text></svg></span>
+<span class="pay" title="Check"><svg viewBox="0 0 54 34" aria-hidden="true"><rect width="54" height="34" rx="4" fill="#fff" stroke="#5e5e5e"/><path d="M8 12h22M8 18h16" stroke="#5e5e5e" stroke-width="1.5"/><path d="M30 20l4 4 8-9" fill="none" stroke="#0b7a22" stroke-width="2"/></svg></span>
+</div><h2>Operation Hours</h2><p>Monday–Friday 8:00 AM – 5:00 PM. Saturday by appointment. Sunday closed.</p></article>
 </div></div></section>
 </main>
 <script>document.getElementById("contact-form").addEventListener("submit", function (event) { if (document.getElementById("math").value.trim() !== "7") { event.preventDefault(); alert("Check the I'm not a robot question and try again."); } });</script>
