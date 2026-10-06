@@ -1,3 +1,4 @@
+
 (function () {
   var feed = document.getElementById("feed");
   if (!feed) return;
@@ -7,21 +8,24 @@
     if (local.length) posts = local;
   } catch (e) {}
   posts.sort(function (a, b) { return (b.created || 0) - (a.created || 0); });
+  var empty = document.getElementById("empty");
+  if (!posts.length) return;
+  if (empty) empty.remove();
   posts.forEach(function (post) {
     var article = document.createElement("article");
     article.className = "post";
     var when = post.created ? new Date(post.created).toLocaleDateString() : "";
-    article.innerHTML =
-      '<div class="post-head"><strong>' + escapeHtml(post.title || "Job") + '</strong><div class="post-meta">' +
-      escapeHtml([post.location, when].filter(Boolean).join(" · ")) + '</div></div>' +
-      '<div class="pair"><figure><img alt="Before" src="' + post.before + '"><figcaption>Before</figcaption></figure>' +
-      '<figure><img alt="After" src="' + post.after + '"><figcaption>After</figcaption></figure></div>' +
-      '<p>' + escapeHtml(post.description || "") + '</p>';
+    var photos = post.photos || [post.before, post.after].filter(Boolean);
+    article.innerHTML = '<div class="post-head"><strong></strong><div class="post-meta"></div></div><div class="photos"></div><p></p>';
+    article.querySelector("strong").textContent = post.title || "Job";
+    article.querySelector(".post-meta").textContent = when;
+    article.querySelector("p").textContent = post.description || "";
+    photos.forEach(function (src) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = post.title || "Job photo";
+      article.querySelector(".photos").appendChild(img);
+    });
     feed.appendChild(article);
   });
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, function (ch) {
-      return { "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[ch];
-    });
-  }
 })();

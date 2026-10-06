@@ -131,7 +131,7 @@ textarea { min-height: 120px; }
 .post-head, .post p { padding: 0 16px; }
 .post-head { padding-top: 14px; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; }
-.pair img { width: 100%; height: 300px; object-fit: cover; background: #eee; }
+.pair img, .photos img { width: 100%; height: 280px; object-fit: cover; background: #eee; } .photos { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; padding: 0 12px 12px; }
 .pair figcaption { padding: 8px 10px; font-family: "Segoe UI", Arial, sans-serif; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.75rem; color: var(--green-deep); }
 .hidden { display: none; }
 .danger { background: #fff; color: #9b1c1c; border: 1px solid #e7b4b4; border-radius: 999px; padding: 8px 12px; cursor: pointer; }
@@ -166,16 +166,24 @@ textarea { min-height: 120px; }
     if (local.length) posts = local;
   } catch (e) {}
   posts.sort(function (a, b) { return (b.created || 0) - (a.created || 0); });
+  var empty = document.getElementById("empty");
+  if (!posts.length) return;
+  if (empty) empty.remove();
   posts.forEach(function (post) {
     var article = document.createElement("article");
     article.className = "post";
     var when = post.created ? new Date(post.created).toLocaleDateString() : "";
-    article.innerHTML = '<div class="post-head"><strong></strong><div class="post-meta"></div></div><div class="pair"><figure><img alt="Before"><figcaption>Before</figcaption></figure><figure><img alt="After"><figcaption>After</figcaption></figure></div><p></p>';
+    var photos = post.photos || [post.before, post.after].filter(Boolean);
+    article.innerHTML = '<div class="post-head"><strong></strong><div class="post-meta"></div></div><div class="photos"></div><p></p>';
     article.querySelector("strong").textContent = post.title || "Job";
-    article.querySelector(".post-meta").textContent = [post.location, when].filter(Boolean).join(" · ");
-    article.querySelectorAll("img")[0].src = post.before;
-    article.querySelectorAll("img")[1].src = post.after;
+    article.querySelector(".post-meta").textContent = when;
     article.querySelector("p").textContent = post.description || "";
+    photos.forEach(function (src) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = post.title || "Job photo";
+      article.querySelector(".photos").appendChild(img);
+    });
     feed.appendChild(article);
   });
 })();
