@@ -82,12 +82,15 @@
   }
   gate.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (document.getElementById("code").value === "ProCeilings684") {
+    var entered = document.getElementById("code").value.trim();
+    if (entered === "ProCeilings684") {
       sessionStorage.setItem("proceilings-auth", "yes");
       gate.classList.add("hidden");
       panel.classList.remove("hidden");
       render();
-    } else alert("That code is not right.");
+    } else {
+      alert("That code is not right. Use ProCeilings684");
+    }
   });
   document.getElementById("uploader").addEventListener("submit", function (event) {
     event.preventDefault();
@@ -109,7 +112,8 @@
   });
   var exportButton = document.getElementById("export");
   if (exportButton) exportButton.addEventListener("click", function () {
-    var blob = new Blob(["window.GALLERY_POSTS = " + JSON.stringify(load()) + ";\n"], { type: "text/javascript" });
+    var body = "window.GALLERY_POSTS = " + JSON.stringify(load()) + ";\n";
+    var blob = new Blob([body], { type: "text/javascript" });
     var link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "gallery-data.js";
