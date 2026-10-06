@@ -108,7 +108,7 @@
     queue = [];
     drawOrder();
     render();
-    window.location.href = "before-after.html";
+    window.location.href = "completed-jobs.html";
   });
   var exportButton = document.getElementById("export");
   if (exportButton) exportButton.addEventListener("click", function () {
